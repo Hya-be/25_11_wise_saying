@@ -1,4 +1,3 @@
-//2025-12-01 20:43
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -67,6 +66,16 @@ class App {
   }
 
   void actionRemove(String cmd){//매개변수 cmd에 삭제?id=1 문자열이 들어있다면
+    int id = getParamAsInt(cmd, "id",0);
+    if (id == 0) {
+      System.out.println("id를 정확히 입력해주세요.");
+      return;
+    }
+
+    System.out.printf("%d번 명언을 삭제합니다.\n", id);
+  }
+  int getParamAsInt(String cmd, String paramName, int defaultValue){
+
     String[] cmdBits = cmd.split("\\?", 2);
     String action = cmdBits[0];
     String queryString = cmdBits[1];
@@ -80,14 +89,19 @@ class App {
 
       String[] queryParamStrBits = queryParamStr.split("=", 2);
 
-      String paramName = queryParamStrBits[0];
+      String _paramName = queryParamStrBits[0];
       String paramValue = queryParamStrBits[1];
 
-      if (paramName.equals("id")) {
-        id = Integer.parseInt(paramValue);
+      if (_paramName.equals(paramName)) {
+        try {
+          // 문제가 없을 경우
+          return Integer.parseInt(paramValue);
+        }catch (NumberFormatException e){
+          //문제가 있을 경우
+          return defaultValue;
+        }
       }
     }
-
-    System.out.printf("%d번 명언을 삭제합니다.\n", id);
+    return defaultValue;
   }
 }
