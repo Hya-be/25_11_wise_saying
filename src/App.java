@@ -1,3 +1,4 @@
+//2025-12-01 20:43
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -66,8 +67,27 @@ class App {
   }
 
   void actionRemove(String cmd){//매개변수 cmd에 삭제?id=1 문자열이 들어있다면
-    String idStr = cmd.replace("삭제?id=", "");// 삭제?id= 부분만 "" 빈문자열로 대체, 결국 "1"만 남게된다
-    int id = Integer.parseInt(idStr); //idStr변수에는 "1" 문자열 1이 저장되어있고, Integer.parseInt(idStr) 통해서 "1"이 숫자 1로 바뀌고, id 변수에 저장된다.
+    String[] cmdBits = cmd.split("\\?", 2);
+    String action = cmdBits[0];
+    String queryString = cmdBits[1];
+
+    String[] queryStringBits = queryString.split("&");
+    //queryStringBits[0] => id = 1
+    //queryStringBits[1] => archive=true
+    int id = 0;
+    for (int i = 0; i < queryStringBits.length; i++) {
+      String queryParamStr = queryStringBits[i];
+
+      String[] queryParamStrBits = queryParamStr.split("=", 2);
+
+      String paramName = queryParamStrBits[0];
+      String paramValue = queryParamStrBits[1];
+
+      if (paramName.equals("id")) {
+        id = Integer.parseInt(paramValue);
+      }
+    }
+
     System.out.printf("%d번 명언을 삭제합니다.\n", id);
   }
 }
