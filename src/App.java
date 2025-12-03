@@ -22,15 +22,12 @@ class App {
 
       if (cmd.equals("종료")) {
         break;
-      }
-      else if (cmd.equals("등록")) {
+      } else if (cmd.equals("등록")) {
         actionWrite();
         System.out.printf("%d번 명언이 등록되었습니다.\n", lastWiseSayingId);
-      }
-      else if (cmd.equals("목록")) {
+      } else if (cmd.equals("목록")) {
         actionList();
-      }
-      else if (cmd.startsWith("삭제?")){ //cmd에서 삭제? 시작하는가? true면 함수 호출
+      } else if (cmd.startsWith("삭제?")) { //cmd에서 삭제? 시작하는가? true면 함수 호출
         actionRemove(cmd);
       }
     }
@@ -65,16 +62,31 @@ class App {
     }
   }
 
-  void actionRemove(String cmd){//매개변수 cmd에 삭제?id=1 문자열이 들어있다면
-    int id = getParamAsInt(cmd, "id",0);
+  void actionRemove(String cmd) { // 매개변수 cmd에 삭제?id=1 문자열이 들어있다면
+    int id = getParamAsInt(cmd, "id", 0);
     if (id == 0) {
       System.out.println("id를 정확히 입력해주세요.");
       return;
     }
 
-    System.out.printf("%d번 명언을 삭제합니다.\n", id);
+    Quotation target = null;
+    for (Quotation q : quotations) {
+      if (q.id == id) {
+        target = q;
+        break;
+      }
+    }
+
+    if (target != null) {
+      quotations.remove(target);
+      System.out.printf("%d번 명언을 삭제했습니다.\n", id);
+    } else {
+      System.out.printf("%d번 명언은 존재하지 않습니다.\n", id);
+    }
   }
-  int getParamAsInt(String cmd, String paramName, int defaultValue){
+
+
+  int getParamAsInt(String cmd, String paramName, int defaultValue) {
 
     String[] cmdBits = cmd.split("\\?", 2);
     String action = cmdBits[0];
@@ -96,7 +108,7 @@ class App {
         try {
           // 문제가 없을 경우
           return Integer.parseInt(paramValue);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
           //문제가 있을 경우
           return defaultValue;
         }
